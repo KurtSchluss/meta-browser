@@ -84,13 +84,13 @@ PACKAGECONFIG[use-egl] = ",,virtual/egl virtual/libgles2"
 # and command-line switches (extra dependencies should not
 # be necessary but are OK to add).
 PACKAGECONFIG[disable-api-keys-info-bar] = ""
-PACKAGECONFIG[component-build] = ""
+PACKAGECONFIG[component-build] = "is_component_build=true, is_component_build=false"
 PACKAGECONFIG[ignore-lost-context] = ""
 PACKAGECONFIG[impl-side-painting] = ""
 PACKAGECONFIG[kiosk-mode] = ""
-PACKAGECONFIG[proprietary-codecs] = ""
-PACKAGECONFIG[wayland] = ",,wayland virtual/mesa"
-PACKAGECONFIG[x11] = ",,virtual/libx11"
+PACKAGECONFIG[proprietary-codecs] = "proprietary_codecs=true ffmpeg_branding=\\\"Chrome\\\", proprietary_codecs=false"
+PACKAGECONFIG[wayland] = "ozone_platform_wayland=true, ozone_platform_wayland=false, wayland virtual/mesa"
+PACKAGECONFIG[x11] = "ozone_platform_x11=true, ozone_platform_x11=false, virtual/libx11"
 PACKAGECONFIG[content-shell] = ""
 
 
@@ -128,22 +128,18 @@ EXTRA_OEGN = " \
         v8_use_external_startup_data=false \
         linux_use_bundled_binutils=false \
         use_gold=true \
-        ${@bb.utils.contains('PACKAGECONFIG', 'component-build', 'is_component_build=true', 'is_component_build=false', d)} \
-        ${@bb.utils.contains('PACKAGECONFIG', 'proprietary-codecs', 'proprietary_codecs=true ffmpeg_branding=\\\"Chrome\\\"', 'proprietary_codecs=false', d)} \
         use_ozone=true \
         ozone_auto_platforms=false \
         ozone_platform_headless=true \
         enable_package_mash_services=true \
-        ${@bb.utils.contains('PACKAGECONFIG', 'wayland', 'ozone_platform_wayland=true', 'ozone_platform_wayland=false', d)} \
-        ${@bb.utils.contains('PACKAGECONFIG', 'x11', 'ozone_platform_x11=true', 'ozone_platform_x11=false', d)} \
-        ${@bb.utils.contains('PACKAGECONFIG', 'wayland', 'ozone_platform=\\\"wayland\\\"', bb.utils.contains('PACKAGECONFIG', 'x11', 'ozone_platform=\\\"x11\\\"', 'ozone_platform=\\\"headless\\\"', d), d)} \
+        ozone_platform=${@bb.utils.contains('PACKAGECONFIG', 'wayland', '\\\"wayland\\\"', bb.utils.contains('PACKAGECONFIG', 'x11', '\\\"x11\\\"', '\\\"headless\\\"', d), d)} \
         v8_use_snapshot=false \
         use_kerberos=false \
         use_cups=false \
         use_gnome_keyring=false \
         treat_warnings_as_errors=false \
         target_cpu=\"${CPUTARGET}\" \
-        target_os=\"linux\"  \
+        target_os=\"linux\" \
         host_toolchain=\"//build/toolchain/cros:host\" \
         custom_toolchain=\"//build/toolchain/cros:target\" \
         v8_snapshot_toolchain=\"//build/toolchain/cros:v8_snapshot\" \
