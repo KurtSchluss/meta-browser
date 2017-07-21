@@ -172,11 +172,6 @@ EXTRA_OEGN = " \
 "
 
 python() {
-    if d.getVar('CHROMIUM_ENABLE_WAYLAND', True) == '1':
-        d.appendVar('GYP_DEFINES', ' %s ' % d.getVar('CHROMIUM_WAYLAND_GYP_DEFINES', True))
-    else:
-        d.appendVar('GYP_DEFINES', ' %s ' % d.getVar('CHROMIUM_X11_GYP_DEFINES', True))
-
     # Set 'is_debug' according to $CHROMIUM_BUILD_TYPE
     if d.getVar('CHROMIUM_BUILD_TYPE', True) == 'Release':
         d.appendVar('EXTRA_OEGN', ' %s ' % 'is_official_build=true')
